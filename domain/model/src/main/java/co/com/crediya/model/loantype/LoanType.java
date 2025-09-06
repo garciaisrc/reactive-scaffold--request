@@ -1,0 +1,20 @@
+package co.com.crediya.model.loantype;
+import lombok.Builder;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder(toBuilder = true)
+public class LoanType {
+    private Integer idTip;
+    private String nameLoan;
+    private Double miniAmount;
+    private Double maxAmount;
+    private Double rateInterest;
+    private Boolean autoValidation;
+}
