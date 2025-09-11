@@ -5,7 +5,5 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface StateApplicationRepository {
-    Mono<StateApplication> save(StateApplication stateApplication);
-    Flux<StateApplication> findAll();
-    Mono<StateApplication> findByName(Integer name);
+    Mono<StateApplication>findById(Integer idState);
 }

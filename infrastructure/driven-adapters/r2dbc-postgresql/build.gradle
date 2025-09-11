@@ -8,7 +8,7 @@ dependencies {
     implementation 'io.r2dbc:r2dbc-pool'
     implementation 'org.reactivecommons.utils:object-mapper-api:0.1.0'
     testImplementation 'io.projectreactor:reactor-test'
-
     testImplementation 'org.reactivecommons.utils:object-mapper:0.1.0'
+    implementation 'org.springframework.data:spring-data-commons'
 }
 

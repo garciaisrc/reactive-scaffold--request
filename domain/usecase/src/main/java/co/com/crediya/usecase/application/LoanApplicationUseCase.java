@@ -39,7 +39,7 @@ public class LoanApplicationUseCase {
     }
 
     private Mono<Void> validateLoanType(Integer id, Double amount) {
-        return loanTypeRepository.findById(id)
+        return loanTypeRepository.findbyid(id)
                 .switchIfEmpty(Mono.error(new IllegalArgumentException("El tipo de préstamo no existe")))
                 .flatMap(loanType -> {
                     if (amount < loanType.getMiniAmount() || amount > loanType.getMaxAmount()) {
@@ -51,4 +51,5 @@ public class LoanApplicationUseCase {
                     return Mono.empty();
                 });
     }
+
 }

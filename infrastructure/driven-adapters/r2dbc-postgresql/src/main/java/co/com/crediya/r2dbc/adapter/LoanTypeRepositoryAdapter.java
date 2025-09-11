@@ -24,7 +24,7 @@ public class LoanTypeRepositoryAdapter implements LoanTypeRepository {
     }
 
     @Override
-    public Mono<LoanType> findById(Integer loanTypeId) {
+    public Mono<LoanType> findbyid(Integer loanTypeId) {
         return repository.findById(Integer.valueOf(loanTypeId))
                 .map(LoanTypeMapper::toDomain);
     }

@@ -28,7 +28,7 @@ public class Handler {
                             .numDocumentUser(dto.getNumDocumentUser()) // se usa para verificar existencia
                             .amountApp(dto.getAmountApp().doubleValue())
                             .termApp(dto.getTermApp())
-                            .emailApp(dto.getEmailApp()) // opcional, será sobrescrito si viene del microservicio
+                            .emailApp(dto.getEmailApp()) // será sobrescrito si viene del microservicio
                             .idTip(dto.getIdTip())
                             .build();
 
