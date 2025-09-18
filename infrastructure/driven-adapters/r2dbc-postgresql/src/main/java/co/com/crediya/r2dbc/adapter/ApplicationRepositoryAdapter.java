@@ -8,10 +8,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import org.springframework.data.domain.Pageable;
 
 @RequiredArgsConstructor
 @Repository
-public class ApplicationRepositoryAdapter implements ApplicationRepository {
+public class ApplicationRepositoryAdapter implements ApplicationRepository{
 
     private final ApplicationReactiveRepository repository;
 
@@ -22,8 +23,10 @@ public class ApplicationRepositoryAdapter implements ApplicationRepository {
     }
 
     @Override
-    public Flux<Application> findAll() {
-        return repository.findAll().map(ApplicationMapper::toModel);
+    public Flux<Application> findAll(int page, int size) {
+        int offset = page * size; // cálculo del desplazamiento
+        return repository.findAllPaged(size, offset)
+                .map(ApplicationMapper::toModel);
     }
 
     @Override

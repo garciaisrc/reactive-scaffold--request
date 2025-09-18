@@ -5,14 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class UserVerificationResult {
-    private Boolean exists;
-    private String numDocumentUser;
-    private String emailApp;
+public class StateChangeMessage {
+    private Integer idApplication;
+    private Integer newState;
+    private String emailUser;
 }

@@ -1,7 +1,24 @@
+# Imagen base de JDK 17 ligera
 FROM eclipse-temurin:17-jdk-alpine
-VOLUME /tmp
-COPY *.jar requests.jar
-ENV JAVA_OPTS=" -Xshareclasses:name=cacheapp,cacheDir=/cache,nonfatal -XX:+UseContainerSupport -XX:MaxRAMPercentage=70 -Djava.security.egd=file:/dev/./urandom"
-# Replace with a non-root user to avoid running the container with excessive privileges
+
+# Crear usuario sin privilegios
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+
+# Crear directorio de trabajo dentro del contenedor
+WORKDIR /requests
+
+# Copiar el jar generado por Gradle
+COPY build/libs/*.jar requests.jar
+
+# Puerto del servicio
+EXPOSE 8082
+
+# Opciones JVM 
+ENV JAVA_OPTS="-XX:+UseContainerSupport -XX:MaxRAMPercentage=70 -Djava.security.egd=file:/dev/./urandom"
+
+# Permisos y usuario
+RUN chown appuser:appgroup requests.jar
 USER appuser
-ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS  -jar requests.jar" ]
+
+# Ejecutar el microservicio
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar requests.jar"]

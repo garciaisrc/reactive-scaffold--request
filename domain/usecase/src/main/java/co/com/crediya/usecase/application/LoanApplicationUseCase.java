@@ -1,10 +1,13 @@
 package co.com.crediya.usecase.application;
 import co.com.crediya.model.application.Application;
+import co.com.crediya.model.application.gateways.AlertSenderGateway;
 import co.com.crediya.model.application.gateways.ApplicationRepository;
 import co.com.crediya.model.application.gateways.IRestConsumerClient;
 import co.com.crediya.model.loantype.gateways.LoanTypeRepository;
+import co.com.crediya.model.dto.StateChangeMessage;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
+
 
 
 @RequiredArgsConstructor
@@ -12,6 +15,8 @@ public class LoanApplicationUseCase {
     private final ApplicationRepository applicationRepository;
     private final LoanTypeRepository loanTypeRepository;
     private final IRestConsumerClient iRestConsumerUserClient;
+
+    private final AlertSenderGateway alertSenderGateway;
     public Mono<Application> submitApplication(Application application) {
         return iRestConsumerUserClient.getUserByDocument(application.getNumDocumentUser())
                 .flatMap(userResponse -> {
@@ -39,7 +44,7 @@ public class LoanApplicationUseCase {
     }
 
     private Mono<Void> validateLoanType(Integer id, Double amount) {
-        return loanTypeRepository.findById(id)
+        return loanTypeRepository.findbyid(id)
                 .switchIfEmpty(Mono.error(new IllegalArgumentException("El tipo de préstamo no existe")))
                 .flatMap(loanType -> {
                     if (amount < loanType.getMiniAmount() || amount > loanType.getMaxAmount()) {
@@ -49,6 +54,26 @@ public class LoanApplicationUseCase {
                         ));
                     }
                     return Mono.empty();
+                });
+    }
+    public Mono<Application> updateApplicationState(Integer idApplication, Integer idState) {
+        return applicationRepository.findById(idApplication)
+                .switchIfEmpty(Mono.error(new IllegalArgumentException("Solicitud no encontrada")))
+                .flatMap(existing -> {
+                    Application updated = existing.toBuilder()
+                            .idState(idState)
+                            .build();
+
+                    return applicationRepository.save(updated)
+                            .flatMap(saved -> {
+                                StateChangeMessage message = StateChangeMessage.builder()
+                                        .idApplication(saved.getIdApplication())
+                                        .newState(saved.getIdState())
+                                        .emailUser(saved.getEmailApp())
+                                        .build();
+                                return alertSenderGateway.sendStateChange(message)
+                                        .thenReturn(saved);
+                            });
                 });
     }
 }
