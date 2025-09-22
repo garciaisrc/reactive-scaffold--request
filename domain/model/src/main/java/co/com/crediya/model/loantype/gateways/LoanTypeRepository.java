@@ -6,7 +6,7 @@ import reactor.core.publisher.Mono;
 
 public interface LoanTypeRepository {
     Mono<LoanType> save(LoanType loanidTip);
-    Mono<LoanType> findById(Integer loanTypeId);
+    Mono<LoanType> findbyid(Integer loanTypeId);
     Flux<LoanType>findAll();
     Mono<Void> deleteById(String idTiploan);
 }

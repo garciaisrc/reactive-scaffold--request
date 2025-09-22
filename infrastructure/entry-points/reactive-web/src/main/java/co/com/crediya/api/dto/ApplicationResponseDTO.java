@@ -1,5 +1,6 @@
 package co.com.crediya.api.dto;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,4 +20,18 @@ public class ApplicationResponseDTO {
     private String emailApp;
     private Integer loanTypeName;
     private Integer state;
+
+    @JsonGetter("state")
+    public String getStateDescription() {
+        return switch (state) {
+            case 1 -> "Pendiente por revision";case 2 -> "Aprobado";case 3 -> "Rechazado";default -> "Desconocido";
+        };
+    }
+    @JsonGetter("loanTypeName")
+    public String getLoanTypeDescription() {
+        return switch (loanTypeName) {
+            case 1 -> "Personal";case 2 -> "Vehicular";case 3 -> "Hipotecario";default -> "Desconocido";
+        };
+    }
+
 }

@@ -19,6 +19,14 @@ spring:
       path: "/h2"
   profiles:
     include: null
+  cloud:
+    aws:
+      region:
+        static: us-east-1
+      sqs:
+        queues:
+          stateChange: "loan-application-state-change"
+          capacityRequest: "loan-application-capacity-request"
 management:
   endpoints:
     web:
@@ -68,3 +76,6 @@ resilience4j:
         slidingWindowSize: 10
         minimumNumberOfCalls: 10
         waitDurationInOpenState: "10s"
+jwt:
+  secret: "LaClaveSuperSecreta7611201250MiClaveSuperSecreta"
+
